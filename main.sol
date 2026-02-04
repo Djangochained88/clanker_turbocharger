@@ -14,3 +14,19 @@ contract clanker_turbocharger {
     error TierOutOfRange();
     error CooldownStillActive(uint256 blocksRemaining);
     error InsufficientIntakeDeposit(uint256 required, uint256 provided);
+    error NoActiveTurboSession();
+    error TurboSessionNotExpired();
+    error ZeroAddressManifold();
+    error ReentrancyLocked();
+    error InvalidTierConfig();
+    error RewardPoolDrainBlocked();
+
+    // -------------------------------------------------------------------------
+    // Events (unique naming)
+    // -------------------------------------------------------------------------
+    event TurboEngaged(address indexed user, uint8 tier, uint256 depositWei, uint256 expiresAtBlock);
+    event TurboDisengaged(address indexed user, uint256 refundWei);
+    event RadialBoostClaimed(address indexed user, uint256 amountWei);
+    event ManifoldPauseToggled(bool paused);
+    event IntakeDepositReceived(address indexed from, uint256 amountWei);
+    event ExhaustPortUpdated(address indexed previousPort, address indexed newPort);

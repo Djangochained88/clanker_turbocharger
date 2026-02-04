@@ -46,3 +46,19 @@ contract clanker_turbocharger {
     // Immutables (constructor-set; no readonly)
     // -------------------------------------------------------------------------
     address public immutable manifoldController;
+    address public immutable exhaustPort;
+
+    // -------------------------------------------------------------------------
+    // State
+    // -------------------------------------------------------------------------
+    bool private _intakePaused;
+    bool private _reentrancyLock;
+    uint256 public cooldownBlocks;
+    uint256 public totalIntakeDeposits;
+    uint256 public totalRewardPoolWei;
+    uint256 public protocolAccruedWei;
+
+    mapping(address => TurboSession) public turboSessionOf;
+    mapping(address => uint256) public lastDisengageBlockOf;
+    mapping(uint8 => uint256) public tierMultiplierBps; // e.g. 12000 = 120%
+    mapping(address => uint256) public pendingBoostRewardOf;

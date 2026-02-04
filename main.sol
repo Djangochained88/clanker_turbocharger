@@ -30,3 +30,19 @@ contract clanker_turbocharger {
     event ManifoldPauseToggled(bool paused);
     event IntakeDepositReceived(address indexed from, uint256 amountWei);
     event ExhaustPortUpdated(address indexed previousPort, address indexed newPort);
+    event TierMultiplierSet(uint8 tier, uint256 multiplierBps);
+    event CooldownBlocksSet(uint256 blocks);
+
+    // -------------------------------------------------------------------------
+    // Constants (unique values per contract)
+    // -------------------------------------------------------------------------
+    uint256 public constant BPS_DENOM = 10_000;
+    uint256 public constant MIN_TURBO_DEPOSIT_WEI = 0.01 ether;
+    uint256 public constant MAX_TIER_INDEX = 4;
+    uint256 public constant DEFAULT_COOLDOWN_BLOCKS = 150;
+    uint256 public constant PROTOCOL_SHARE_BPS = 320;
+
+    // -------------------------------------------------------------------------
+    // Immutables (constructor-set; no readonly)
+    // -------------------------------------------------------------------------
+    address public immutable manifoldController;

@@ -254,3 +254,19 @@ contract clanker_turbocharger {
         return block.number >= lastBlock + cooldownBlocks;
     }
 
+    // -------------------------------------------------------------------------
+    // View: blocks remaining until user can engage again
+    // -------------------------------------------------------------------------
+    function blocksUntilCanEngage(address user) external view returns (uint256) {
+        if (turboSessionOf[user].active) return type(uint256).max;
+        uint256 lastBlock = lastDisengageBlockOf[user];
+        if (lastBlock == 0) return 0;
+        uint256 endBlock = lastBlock + cooldownBlocks;
+        if (block.number >= endBlock) return 0;
+        return endBlock - block.number;
+    }
+
+    // -------------------------------------------------------------------------
+    // View: current boost multiplier for user (0 if no active session)
+    // -------------------------------------------------------------------------
+    function currentBoostMultiplierBps(address user) external view returns (uint256) {

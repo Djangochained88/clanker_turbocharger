@@ -318,3 +318,19 @@ contract clanker_turbocharger {
 
     // -------------------------------------------------------------------------
     // Internal: refund = deposit minus protocol share
+    // -------------------------------------------------------------------------
+    function _refundAmount(uint256 depositWei) internal pure returns (uint256) {
+        return (depositWei * (BPS_DENOM - PROTOCOL_SHARE_BPS)) / BPS_DENOM;
+    }
+
+    // -------------------------------------------------------------------------
+    // View: total ETH held by contract (deposits + reward pool + protocol)
+    // -------------------------------------------------------------------------
+    function totalBalance() external view returns (uint256) {
+        return address(this).balance;
+    }
+
+    // -------------------------------------------------------------------------
+    // View: effective reward pool (balance minus locked deposits)
+    // -------------------------------------------------------------------------
+    function availableRewardPoolWei() external view returns (uint256) {

@@ -126,3 +126,19 @@ contract clanker_turbocharger {
         session.tier = tier;
         session.depositWei = msg.value;
         session.engagedAtBlock = block.number;
+        session.expiresAtBlock = expiresAt;
+        session.active = true;
+
+        totalIntakeDeposits += msg.value;
+        uint256 protocolCut = (msg.value * PROTOCOL_SHARE_BPS) / BPS_DENOM;
+        protocolAccruedWei += protocolCut;
+        totalRewardPoolWei += (msg.value - protocolCut);
+
+        emit TurboEngaged(msg.sender, tier, msg.value, expiresAt);
+        emit IntakeDepositReceived(msg.sender, msg.value);
+    }
+
+    // -------------------------------------------------------------------------
+    // External: disengage turbo (after expiry; refund minus protocol share)
+    // -------------------------------------------------------------------------
+    function disengageTurbo() external nonReentrant {

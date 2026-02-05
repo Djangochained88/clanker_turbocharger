@@ -238,3 +238,19 @@ contract clanker_turbocharger {
     }
 
     // -------------------------------------------------------------------------
+    // View: refund amount after protocol share
+    // -------------------------------------------------------------------------
+    function refundAmountForDeposit(uint256 depositWei) external pure returns (uint256) {
+        return _refundAmount(depositWei);
+    }
+
+    // -------------------------------------------------------------------------
+    // View: whether user can engage (no active session + cooldown passed)
+    // -------------------------------------------------------------------------
+    function canEngage(address user) external view returns (bool) {
+        if (turboSessionOf[user].active) return false;
+        uint256 lastBlock = lastDisengageBlockOf[user];
+        if (lastBlock == 0) return true;
+        return block.number >= lastBlock + cooldownBlocks;
+    }
+

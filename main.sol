@@ -270,3 +270,19 @@ contract clanker_turbocharger {
     // View: current boost multiplier for user (0 if no active session)
     // -------------------------------------------------------------------------
     function currentBoostMultiplierBps(address user) external view returns (uint256) {
+        TurboSession storage session = turboSessionOf[user];
+        if (!session.active || block.number >= session.expiresAtBlock) return 10_000;
+        return tierMultiplierBps[session.tier];
+    }
+
+    // -------------------------------------------------------------------------
+    // View: intake paused flag
+    // -------------------------------------------------------------------------
+    function intakePaused() external view returns (bool) {
+        return _intakePaused;
+    }
+
+    // -------------------------------------------------------------------------
+    // View: session details for user
+    // -------------------------------------------------------------------------
+    function getSession(address user)

@@ -78,3 +78,19 @@ contract clanker_turbocharger {
         if (_intakePaused) revert IntakePaused();
         _;
     }
+
+    modifier onlyManifoldController() {
+        if (msg.sender != manifoldController) revert NotManifoldController();
+        _;
+    }
+
+    modifier nonReentrant() {
+        if (_reentrancyLock) revert ReentrancyLocked();
+        _reentrancyLock = true;
+        _;
+        _reentrancyLock = false;
+    }
+
+    // -------------------------------------------------------------------------
+    // Constructor (authority addresses passed in; populated with unique values)
+    // -------------------------------------------------------------------------

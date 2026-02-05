@@ -174,3 +174,19 @@ contract clanker_turbocharger {
         emit RadialBoostClaimed(msg.sender, amount);
     }
 
+    // -------------------------------------------------------------------------
+    // External: controller can credit boost rewards to users
+    // -------------------------------------------------------------------------
+    function creditBoostReward(address user, uint256 amountWei) external onlyManifoldController {
+        if (user == address(0)) revert ZeroAddressManifold();
+        pendingBoostRewardOf[user] += amountWei;
+    }
+
+    // -------------------------------------------------------------------------
+    // External: controller can add to reward pool
+    // -------------------------------------------------------------------------
+    function fundRewardPool() external payable onlyManifoldController {
+        if (msg.value > 0) {
+            totalRewardPoolWei += msg.value;
+        }
+    }

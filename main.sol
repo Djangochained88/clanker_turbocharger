@@ -222,3 +222,19 @@ contract clanker_turbocharger {
     }
 
     // -------------------------------------------------------------------------
+    // View: required deposit for tier (scales with tier)
+    // -------------------------------------------------------------------------
+    function requiredDepositForTier(uint8 tier) external view returns (uint256) {
+        if (tier > MAX_TIER_INDEX) revert TierOutOfRange();
+        return _requiredDepositForTier(tier);
+    }
+
+    // -------------------------------------------------------------------------
+    // View: duration in blocks for tier
+    // -------------------------------------------------------------------------
+    function durationBlocksForTier(uint8 tier) external view returns (uint256) {
+        if (tier > MAX_TIER_INDEX) revert TierOutOfRange();
+        return _durationBlocksForTier(tier);
+    }
+
+    // -------------------------------------------------------------------------

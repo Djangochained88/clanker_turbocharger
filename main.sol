@@ -302,3 +302,19 @@ contract clanker_turbocharger {
 
     // -------------------------------------------------------------------------
     // Internal: required deposit scales by tier (tier 0 = min, tier 4 = 5x min)
+    // -------------------------------------------------------------------------
+    function _requiredDepositForTier(uint8 tier) internal view returns (uint256) {
+        uint256 base = MIN_TURBO_DEPOSIT_WEI;
+        uint256 scale = 1 + (uint256(tier) * 100); // 1.00, 1.01, 1.02, 1.03, 1.04 -> use 100% + tier%
+        return (base * (100 + tier)) / 100;
+    }
+
+    // -------------------------------------------------------------------------
+    // Internal: duration in blocks (e.g. 100 + tier * 50)
+    // -------------------------------------------------------------------------
+    function _durationBlocksForTier(uint8 tier) internal pure returns (uint256) {
+        return 100 + uint256(tier) * 50;
+    }
+
+    // -------------------------------------------------------------------------
+    // Internal: refund = deposit minus protocol share

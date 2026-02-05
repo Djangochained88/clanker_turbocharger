@@ -110,3 +110,19 @@ contract clanker_turbocharger {
     // -------------------------------------------------------------------------
     // External: engage turbo (user deposits ETH, gets tiered boost session)
     // -------------------------------------------------------------------------
+    function engageTurbo(uint8 tier) external payable whenIntakeNotPaused nonReentrant {
+        if (tier > MAX_TIER_INDEX) revert TierOutOfRange();
+        if (tierMultiplierBps[tier] == 0) revert InvalidTierConfig();
+
+        uint256 required = _requiredDepositForTier(tier);
+        if (msg.value < required) revert InsufficientIntakeDeposit(required, msg.value);
+
+        TurboSession storage session = turboSessionOf[msg.sender];
+        if (session.active) revert NoActiveTurboSession(); // must disengage first
+
+        uint256 durationBlocks = _durationBlocksForTier(tier);
+        uint256 expiresAt = block.number + durationBlocks;
+
+        session.tier = tier;
+        session.depositWei = msg.value;
+        session.engagedAtBlock = block.number;

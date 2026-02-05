@@ -190,3 +190,19 @@ contract clanker_turbocharger {
             totalRewardPoolWei += msg.value;
         }
     }
+
+    // -------------------------------------------------------------------------
+    // External: controller can withdraw protocol share to exhaust port
+    // -------------------------------------------------------------------------
+    function withdrawProtocolAccrued() external onlyManifoldController nonReentrant {
+        uint256 amount = protocolAccruedWei;
+        if (amount == 0) return;
+        protocolAccruedWei = 0;
+        (bool ok,) = exhaustPort.call{ value: amount }("");
+        require(ok, "clanker_turbocharger: exhaust transfer failed");
+    }
+
+    // -------------------------------------------------------------------------
+    // External: controller admin
+    // -------------------------------------------------------------------------
+    function setIntakePaused(bool paused) external onlyManifoldController {

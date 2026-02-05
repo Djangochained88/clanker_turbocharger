@@ -94,3 +94,19 @@ contract clanker_turbocharger {
     // -------------------------------------------------------------------------
     // Constructor (authority addresses passed in; populated with unique values)
     // -------------------------------------------------------------------------
+    constructor() {
+        manifoldController = 0x7E2f3A4b5C6d7e8F9012345678901234567890aBc;
+        exhaustPort = 0x9F1e2D3c4B5a6E7f8901234567890AbCdEf12345;
+        cooldownBlocks = DEFAULT_COOLDOWN_BLOCKS;
+        _intakePaused = false;
+
+        tierMultiplierBps[0] = 10_000;  // 100%
+        tierMultiplierBps[1] = 11_500;  // 115%
+        tierMultiplierBps[2] = 13_200;  // 132%
+        tierMultiplierBps[3] = 15_100;  // 151%
+        tierMultiplierBps[4] = 17_200;  // 172%
+    }
+
+    // -------------------------------------------------------------------------
+    // External: engage turbo (user deposits ETH, gets tiered boost session)
+    // -------------------------------------------------------------------------

@@ -142,3 +142,19 @@ contract clanker_turbocharger {
     // External: disengage turbo (after expiry; refund minus protocol share)
     // -------------------------------------------------------------------------
     function disengageTurbo() external nonReentrant {
+        TurboSession storage session = turboSessionOf[msg.sender];
+        if (!session.active) revert NoActiveTurboSession();
+        if (block.number < session.expiresAtBlock) revert TurboSessionNotExpired();
+
+        uint256 refund = _refundAmount(session.depositWei);
+        session.active = false;
+        totalIntakeDeposits -= session.depositWei;
+
+        lastDisengageBlockOf[msg.sender] = block.number;
+
+        (bool ok,) = msg.sender.call{ value: refund }("");
+        require(ok, "clanker_turbocharger: refund failed");
+
+        emit TurboDisengaged(msg.sender, refund);
+    }
+

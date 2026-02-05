@@ -286,3 +286,19 @@ contract clanker_turbocharger {
     // View: session details for user
     // -------------------------------------------------------------------------
     function getSession(address user)
+        external
+        view
+        returns (
+            uint8 tier,
+            uint256 depositWei,
+            uint256 engagedAtBlock,
+            uint256 expiresAtBlock,
+            bool active
+        )
+    {
+        TurboSession storage s = turboSessionOf[user];
+        return (s.tier, s.depositWei, s.engagedAtBlock, s.expiresAtBlock, s.active);
+    }
+
+    // -------------------------------------------------------------------------
+    // Internal: required deposit scales by tier (tier 0 = min, tier 4 = 5x min)

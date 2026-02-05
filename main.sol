@@ -158,3 +158,19 @@ contract clanker_turbocharger {
         emit TurboDisengaged(msg.sender, refund);
     }
 
+    // -------------------------------------------------------------------------
+    // External: claim accrued boost rewards (from reward pool)
+    // -------------------------------------------------------------------------
+    function claimRadialBoost() external nonReentrant {
+        uint256 amount = pendingBoostRewardOf[msg.sender];
+        if (amount == 0) return;
+
+        pendingBoostRewardOf[msg.sender] = 0;
+        if (amount > address(this).balance) revert RewardPoolDrainBlocked();
+
+        (bool ok,) = msg.sender.call{ value: amount }("");
+        require(ok, "clanker_turbocharger: claim failed");
+
+        emit RadialBoostClaimed(msg.sender, amount);
+    }
+

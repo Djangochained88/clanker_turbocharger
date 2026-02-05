@@ -206,3 +206,19 @@ contract clanker_turbocharger {
     // External: controller admin
     // -------------------------------------------------------------------------
     function setIntakePaused(bool paused) external onlyManifoldController {
+        _intakePaused = paused;
+        emit ManifoldPauseToggled(paused);
+    }
+
+    function setCooldownBlocks(uint256 blocks) external onlyManifoldController {
+        cooldownBlocks = blocks;
+        emit CooldownBlocksSet(blocks);
+    }
+
+    function setTierMultiplierBps(uint8 tier, uint256 multiplierBps) external onlyManifoldController {
+        if (tier > MAX_TIER_INDEX) revert TierOutOfRange();
+        tierMultiplierBps[tier] = multiplierBps;
+        emit TierMultiplierSet(tier, multiplierBps);
+    }
+
+    // -------------------------------------------------------------------------

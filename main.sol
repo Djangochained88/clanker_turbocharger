@@ -62,3 +62,19 @@ contract clanker_turbocharger {
     mapping(address => uint256) public lastDisengageBlockOf;
     mapping(uint8 => uint256) public tierMultiplierBps; // e.g. 12000 = 120%
     mapping(address => uint256) public pendingBoostRewardOf;
+
+    struct TurboSession {
+        uint8 tier;
+        uint256 depositWei;
+        uint256 engagedAtBlock;
+        uint256 expiresAtBlock;
+        bool active;
+    }
+
+    // -------------------------------------------------------------------------
+    // Modifiers
+    // -------------------------------------------------------------------------
+    modifier whenIntakeNotPaused() {
+        if (_intakePaused) revert IntakePaused();
+        _;
+    }

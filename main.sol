@@ -350,3 +350,19 @@ contract clanker_turbocharger {
         if (tier > MAX_TIER_INDEX) revert TierOutOfRange();
         return (
             tierMultiplierBps[tier],
+            _requiredDepositForTier(tier),
+            _durationBlocksForTier(tier)
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // View: global stats for dashboards
+    // -------------------------------------------------------------------------
+    function globalStats()
+        external
+        view
+        returns (
+            uint256 totalDeposits,
+            uint256 rewardPool,
+            uint256 protocolAccrued,
+            bool paused,

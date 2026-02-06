@@ -366,3 +366,19 @@ contract clanker_turbocharger {
             uint256 rewardPool,
             uint256 protocolAccrued,
             bool paused,
+            uint256 cooldown
+        )
+    {
+        return (
+            totalIntakeDeposits,
+            totalRewardPoolWei,
+            protocolAccruedWei,
+            _intakePaused,
+            cooldownBlocks
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // Internal: compute boost factor for a given tier (basis points)
+    // -------------------------------------------------------------------------
+    function _boostFactorBps(uint8 tier) internal view returns (uint256) {

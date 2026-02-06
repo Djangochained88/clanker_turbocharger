@@ -334,3 +334,19 @@ contract clanker_turbocharger {
     // View: effective reward pool (balance minus locked deposits)
     // -------------------------------------------------------------------------
     function availableRewardPoolWei() external view returns (uint256) {
+        uint256 locked = totalIntakeDeposits;
+        uint256 bal = address(this).balance;
+        return bal > locked ? bal - locked : 0;
+    }
+
+    // -------------------------------------------------------------------------
+    // View: tier info (multiplier and required deposit)
+    // -------------------------------------------------------------------------
+    function getTierInfo(uint8 tier)
+        external
+        view
+        returns (uint256 multiplierBps, uint256 requiredDepositWei, uint256 durationBlocks)
+    {
+        if (tier > MAX_TIER_INDEX) revert TierOutOfRange();
+        return (
+            tierMultiplierBps[tier],

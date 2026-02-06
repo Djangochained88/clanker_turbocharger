@@ -382,3 +382,17 @@ contract clanker_turbocharger {
     // Internal: compute boost factor for a given tier (basis points)
     // -------------------------------------------------------------------------
     function _boostFactorBps(uint8 tier) internal view returns (uint256) {
+        return tierMultiplierBps[tier];
+    }
+
+    // -------------------------------------------------------------------------
+    // Receive: allow contract to accept ETH for reward pool
+    // -------------------------------------------------------------------------
+    receive() external payable {
+        if (msg.value > 0) {
+            totalRewardPoolWei += msg.value;
+            emit IntakeDepositReceived(msg.sender, msg.value);
+        }
+    }
+}
+
